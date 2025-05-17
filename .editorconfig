@@ -4,13 +4,10 @@ root = true
 
 [*]
 end_of_line = lf
-insert_final_newline = true
+insert_final_newline = false
 charset = utf-8
 indent_size = 4
 indent_style = space
 
 [*.{nix,md}]
 indent_size = 2
-
-[*.*sh]
-insert_final_newline = false
