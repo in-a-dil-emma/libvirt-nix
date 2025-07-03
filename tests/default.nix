@@ -109,7 +109,7 @@ runNixOSTest {
     ''}")
     basic.wait_for_unit("multi-user.target")
     basic.succeed("${mkScript ''
-      assert_grep "Autostart:.*yes" virsh --connect='qemu:///system' net-info --network default
+      assert_grep "Autostart:.*no" virsh --connect='qemu:///system' net-info --network default
       assert_grep "Active:.*yes" virsh --connect='qemu:///system' net-info --network default
       virsh --connect='qemu:///system' net-destroy --network default
       assert_grep "Active:.*no" virsh --connect='qemu:///system' net-info --network default
@@ -127,12 +127,12 @@ runNixOSTest {
     basic.wait_for_unit("libvirtd.service")
     basic.succeed("${mkScript ''
       assert_grep "Active:.*no" virsh --connect='qemu:///system' net-info --network default
-      assert_grep "Autostart:.*yes" virsh --connect='qemu:///system' net-info --network default
+      assert_grep "Autostart:.*no" virsh --connect='qemu:///system' net-info --network default
     ''}")
     basic.wait_for_unit("multi-user.target")
     basic.succeed("${mkScript ''
       assert_grep "Active:.*yes" virsh --connect='qemu:///system' net-info --network default
-      assert_grep "Autostart:.*yes" virsh --connect='qemu:///system' net-info --network default
+      assert_grep "Autostart:.*no" virsh --connect='qemu:///system' net-info --network default
     ''}")
     basic.shutdown()
   '';

@@ -30,7 +30,9 @@ $ npins add github in-a-dil-emma libvirt-nix -b dev
 
 </details>
 
-### Import in NixOS
+### Import
+
+#### NixOS
 
 <details>
 <summary>
@@ -62,7 +64,7 @@ npins
 
 </details>
 
-### Import in Home Manager (standalone or as a NixOS module)
+#### Home Manager
 
 <details>
 <summary>
@@ -97,7 +99,7 @@ npins
 ## Configuring
 
 <details>
-<summary>virtualisation → <b>libvirtd</b></summary>
+<summary>virtualisation.<b>libvirtd</b></summary>
 
 | OPTION       | TYPE      | DESCRIPTION         |
 |--------------|-----------|---------------------|
@@ -106,7 +108,7 @@ npins
 </details>
 
 <details>
-<summary>virtualisation → libvirtd → connections → <b><ins>uri</ins></b></summary>
+<summary>virtualisation.libvirtd.connections.<b><ins>uri</ins></b></summary>
 
 | OPTION   | DEFAULT | TYPE              |
 |----------|---------|-------------------|
@@ -116,8 +118,10 @@ npins
 
 </details>
 
+### Managed libvirt domains
+
 <details>
-<summary>virtualisation → libvirtd → connections → <ins>uri</ins> → <ins>type</ins> → <b><ins>list element</ins></b></summary>
+<summary>virtualisation.libvirtd.connections.<ins>uri</ins>.<ins>type</ins>.<b><ins>list element</ins></b></summary>
 
 | OPTION     | TYPE            | DESCRIPTION                                          |
 |------------|-----------------|------------------------------------------------------|
@@ -128,8 +132,8 @@ npins
 </details>
 
 <details>
-<details>
-<summary>virtualisation → libvirtd → connections → <ins>uri</ins> → <b>unmanaged</b></summary>
+
+<summary>virtualisation.libvirtd.connections.<ins>uri</ins>.<b>unmanaged</b></summary>
 
 | OPTION   | DEFAULT | TYPE              |
 |----------|---------|-------------------|
@@ -142,7 +146,7 @@ npins
 ### Unmanaged libvirt domains
 
 <details>
-<summary>virtualisation → libvirtd → connections → <ins>uri</ins> → unmanaged → <ins>type</ins> → <b><ins>list element</ins></b></summary>
+<summary>virtualisation.libvirtd.connections.<ins>uri</ins>.unmanaged.<ins>type</ins>.<b><ins>list element</ins></b></summary>
 
 | OPTION  | TYPE            | DESCRIPTION        |
 |---------|-----------------|--------------------|
@@ -152,8 +156,7 @@ npins
 
 </details>
 
-<details>
-<summary><i>Examples</i></summary>
+## Example
 
 ```nix
 { pkgs, ... }: {
@@ -172,14 +175,19 @@ npins
         #   apply true active state or start from restart
         networks = [
           {
-            active = true;   # start this network, will also affect autostart
+            active = true;   # start this network
             restart = false; # do not restart this network, even if the definition changed
             definition = ./virsh/system-default-net.xml;
           }
           {
-            active = null; # don't start nor stop this network
-            restart = true;    # however do restart it if it happens to be running
+            active = null;  # don't start nor stop this network
+            restart = true; # however, do restart it, if it happens to be running
             definition = ./virsh/system-special-net.xml;
+          }
+          {
+            active = false; # stop this network
+            restart = null; # in this case this is a no-op, but if "active" were to be true or null, it would restart the network (if it were running) and if the definition changed
+            definition = ./virsh/system-isol-net.xml;
           }
         ];
         # nuke all pools
@@ -190,5 +198,3 @@ npins
   };
 }
 ```
-
-</details>
