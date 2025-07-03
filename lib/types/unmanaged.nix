@@ -1,5 +1,4 @@
-{ definition
-, unmanaged
+{ unmanaged-definition
 
 , submodule
 , mkOption
@@ -11,20 +10,16 @@
 flip pipe [ attrsOf submodule ] ({ config, name, ... }: {
   options = {
     networks = mkOption {
-      type = definition;
+      type = unmanaged-definition;
       default = null;
     };
     domains = mkOption {
-      type = definition;
+      type = unmanaged-definition;
       default = null;
     };
     pools = mkOption {
-      type = definition;
+      type = unmanaged-definition;
       default = null;
-    };
-    unmanaged = mkOption {
-      type = unmanaged;
-      default = {};
     };
   };
 })
