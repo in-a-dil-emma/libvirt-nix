@@ -170,16 +170,15 @@ npins
         # the options are identical for networks, pools and domains
         # the setup script will apply configuration to each entity one by one in a loop
         # said loop, when described using pseudo-code, will look roughly like this:
-        #   if { ∉ declared || ∉ managed } then { destroy; undefine; next; }
-        #   if { unmanaged && name ∉ names of unmanaged entities } then { destroy; undefine; next; }
-        #   { apply definition; }
-        #   if { active == null } then { do nothing; }
-        #   else if { active == true  } then { start; }
-        #   else { stop; }
-        #   if { restart == null && definition changed } then { restart; }
-        #   else if { restart == true } then { restart; }
+        #   if { ∉ declared } then { stop; undefine; next entity; }
+        #   if { ∈ unmanaged && name ∉ names in unmanaged } then { stop; undefine; next entity; }
+        #   if { ∈ managed } then { apply definition; }
+        #   if { !running && active == true } then { start; }
+        #   else if { running && active == false } then { stop; }
         #   else { do nothing; }
-        #   next;
+        #   if { running && restart == null && definition changed } then { restart; }
+        #   else if { running && restart == true } then { restart; }
+        #   else { do nothing; }
         networks = [
           {
             active = true;   # start this network
@@ -199,7 +198,7 @@ npins
         ];
         # nuke all pools
         pools = [ ];
-        # "domains = null;" is implied by the default value ⇒ do nothing
+        # "domains = null;" is implied by the default value of "null" for this option, which means: do nothing
       };
     };
   };
