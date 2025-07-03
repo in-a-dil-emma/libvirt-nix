@@ -168,11 +168,18 @@ npins
     connections = {
       "qemu:///system" = {
         # the options are identical for networks, pools and domains
-        # the setup script will apply configuration to each entity one by one:
-        #   if the entity is no longer declared, destroy and undefine it
-        #   apply false active state or shut down to restart
-        #   apply (new) definition
-        #   apply true active state or start from restart
+        # the setup script will apply configuration to each entity one by one in a loop
+        # said loop, when described using pseudo-code, will look roughly like this:
+        #   if { ∉ declared || ∉ managed } then { destroy; undefine; next; }
+        #   if { unmanaged && name ∉ names of unmanaged entities } then { destroy; undefine; next; }
+        #   { apply definition; }
+        #   if { active == null } then { do nothing; }
+        #   else if { active == true  } then { start; }
+        #   else { stop; }
+        #   if { restart == null && definition changed } then { restart; }
+        #   else if { restart == true } then { restart; }
+        #   else { do nothing; }
+        #   next;
         networks = [
           {
             active = true;   # start this network
