@@ -1,4 +1,12 @@
+# Nix stuff
 result
 result-*
 .direnv/
+
+# VM stuff
 nixos.qcow2
+
+# IDE stuff
+.vs/
+.idea/
+.vscode/
