@@ -99,31 +99,56 @@ npins
 <details>
 <summary>virtualisation → <b>libvirtd</b></summary>
 
-| OPTION       | DEFAULT             | TYPE      | DESCRIPTION         |
-|--------------|---------------------|-----------|---------------------|
-| connections  | unset               | submodule | Paths to connect to |
+| OPTION       | TYPE      | DESCRIPTION         |
+|--------------|-----------|---------------------|
+| connections  | submodule | Paths to connect to |
 
 </details>
 
 <details>
-<summary>... → connections → <b><ins>uri</ins></b></summary>
+<summary>virtualisation → libvirtd → connections → <b><ins>uri</ins></b></summary>
 
-| OPTION   | DEFAULT | TYPE              | DESCRIPTION             |
-|----------|---------|-------------------|-------------------------|
-| networks | null    | submodule or null | Networks to define      |
-| domains  | null    | submodule or null | Domains to define       |
-| pools    | null    | submodule or null | Storage pools to define |
+| OPTION   | DEFAULT | TYPE              |
+|----------|---------|-------------------|
+| networks | null    | submodule or null |
+| domains  | null    | submodule or null |
+| pools    | null    | submodule or null |
 
 </details>
 
 <details>
-<summary>... → <b><ins>list element</ins></b></summary>
+<summary>virtualisation → libvirtd → connections → <ins>uri</ins> → <ins>type</ins> → <b><ins>list element</ins></b></summary>
 
-| OPTION     | TYPE           | DESCRIPTION                            |
-|------------|----------------|----------------------------------------|
-| enable     | bool or null   | null ⇒ ignore                          |
-| restart    | bool or null   | null ⇒ on definition change, if active |
-| definition | path or string | Path to .xml file                      |
+| OPTION     | TYPE            | DESCRIPTION                                          |
+|------------|-----------------|------------------------------------------------------|
+| active     | null or boolean | null ⇒ do nothing                                    |
+| restart    | null or boolean | false ⇒ do nothing, null ⇒ only on definition change |
+| definition | path or string  | Path to .xml file                                    |
+
+</details>
+
+<details>
+<details>
+<summary>virtualisation → libvirtd → connections → <ins>uri</ins> → <b>unmanaged</b></summary>
+
+| OPTION   | DEFAULT | TYPE              |
+|----------|---------|-------------------|
+| networks | null    | submodule or null |
+| domains  | null    | submodule or null |
+| pools    | null    | submodule or null |
+
+</details>
+
+### Unmanaged libvirt domains
+
+<details>
+<summary>virtualisation → libvirtd → connections → <ins>uri</ins> → unmanaged → <ins>type</ins> → <b><ins>list element</ins></b></summary>
+
+| OPTION  | TYPE            | DESCRIPTION        |
+|---------|-----------------|--------------------|
+| active  | null or boolean | null ⇒ do nothing  |
+| restart | boolean         | false ⇒ do nothing |
+| name    | string          | must be unique     |
 
 </details>
 
@@ -132,23 +157,28 @@ npins
 
 ```nix
 { pkgs, ... }: {
-  virtualisation.libvirt-nix = {
+  virtualisation.libvirtd = {
+    # Provided by NixOS
     enable = true;
     package = pkgs.libvirt-glib;
+    # Provided by this module
     connections = {
       "qemu:///system" = {
         # the options are identical for networks, pools and domains
+        # the setup script will apply configuration to each entity one by one:
+        #   if the entity is no longer declared, destroy and undefine it
+        #   apply false active state or shut down to restart
+        #   apply (new) definition
+        #   apply true active state or start from restart
         networks = [
-          # enable == true + restart == false ⇒ define this net, but never restart it
           {
-            enable = true;
-            restart = false;
+            active = true;   # start this network, will also affect autostart
+            restart = false; # do not restart this network, even if the definition changed
             definition = ./virsh/system-default-net.xml;
           }
-          # enable == null + restart == null ⇒ restart net only if already running
           {
-            enable = null;
-            restart = null;
+            active = null; # don't start nor stop this network
+            restart = true;    # however do restart it if it happens to be running
             definition = ./virsh/system-special-net.xml;
           }
         ];
