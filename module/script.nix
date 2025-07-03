@@ -1,12 +1,17 @@
 {
+  config,
   pkgs,
   lib,
   ...
 }:
 let
   inherit (pkgs) writeShellScript;
+  inherit (lib) mkOption getExe';
   inherit (lib.types) package;
-  inherit (lib) mkOption;
+  inherit (builtins) toJSON;
+
+  script = import ../src/manager pkgs;
+  dataJSON = toJSON config.virtualisation.libvirtd.connections;
 in
 {
   options.libvirt-nix = {
@@ -18,6 +23,6 @@ in
   };
 
   config.libvirt-nix.mainScript = writeShellScript "configure-libvirt-main" ''
-    exec ${lib.getExe pkgs.hello}
+    exec ${getExe' script "main.py"} "${dataJSON}"
   '';
 }
