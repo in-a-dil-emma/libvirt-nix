@@ -118,7 +118,7 @@ npins
 
 </details>
 
-### Managed libvirt domains
+### Managed libvirt entities
 
 <details>
 <summary>virtualisation.libvirtd.connections.<ins>uri</ins>.<ins>type</ins>.<b><ins>list element</ins></b></summary>
@@ -143,7 +143,7 @@ npins
 
 </details>
 
-### Unmanaged libvirt domains
+### Unmanaged libvirt entities
 
 <details>
 <summary>virtualisation.libvirtd.connections.<ins>uri</ins>.unmanaged.<ins>type</ins>.<b><ins>list element</ins></b></summary>
