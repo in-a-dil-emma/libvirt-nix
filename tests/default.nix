@@ -87,7 +87,8 @@ in runNixOSTest {
         networks = [
           {
             definition = ./system-default-network.xml;
-            enable = true;
+            restart = false;
+            active = true;
           }
         ];
       };

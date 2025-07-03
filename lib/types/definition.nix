@@ -12,7 +12,7 @@
 , ... }:
 flip pipe [ submodule listOf nullOr ] {
   options = {
-    state = mkOption { type = nullOr bool; };
+    active = mkOption { type = nullOr bool; };
     restart = mkOption { type = nullOr bool; };
     definition = mkOption { type = oneOf path str; };
   };
