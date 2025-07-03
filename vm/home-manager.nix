@@ -7,9 +7,7 @@
         ../home-manager
       ];
 
-      virtualisation.libvirtd.connections."qemu:///session" = {
-
-      };
+      virtualisation.libvirtd.connections."qemu:///session" = {};
 
       home.file.".zshrc".text = "";
 

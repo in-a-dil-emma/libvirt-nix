@@ -18,9 +18,7 @@
 
   virtualisation.libvirtd = {
     enable = true;
-    connections."qemu:///system" = {
-      # todo
-    };
+    connections."qemu:///system" = {};
   };
 
   environment.loginShellInit = ''
