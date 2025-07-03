@@ -1,4 +1,5 @@
-{ config, ... }: {
+{ config, ... }:
+{
   config.systemd.user.services."libvirt-nix" = {
     Unit = {
       Wants = [

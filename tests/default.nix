@@ -1,47 +1,50 @@
 let
   inputs = import ../npins;
-  pkgs = import inputs.nixpkgs {};
+  pkgs = import inputs.nixpkgs { };
   lib = import (inputs.nixpkgs + "/lib");
 
   inherit (lib) makeBinPath;
   inherit (pkgs) writeShellScript libvirt;
   inherit (pkgs.testers) runNixOSTest;
-  
-  mkScript = text: (writeShellScript "test-script" ''
-    export PATH="${makeBinPath [ libvirt ]}:$PATH"
-    assert_equals() {
-      expected="$1"
-      shift
-      output="$("$@")"
-      if ! [ "$output" = "$1" ]; then
-        echo "===ASSERTION FAILED!======================================="
-        echo "COMMAND \"$@\""
-        echo "===EXPECTED================================================"
-        echo "$expected"
-        echo "===GOT====================================================="
-        echo "$output"
-        echo "==========================================================="
-        exit 1
-      fi
-    }
-    assert_grep() {
-      expected="$1"
-      shift
-      output="$("$@")"
-      if ! [ "$(echo "$output" | grep "$expected" | wc -l)" -gt 0 ]; then
-        echo "===ASSERTION FAILED!======================================="
-        echo "COMMAND \"$@\""
-        echo "===FAILED PATTERN=========================================="
-        echo "$expected"
-        echo "===GOT====================================================="
-        echo "$output"
-        echo "==========================================================="
-        exit 1
-      fi
-    }
-    ${text}
-  '').outPath;
-in runNixOSTest {
+
+  mkScript =
+    text:
+    (writeShellScript "test-script" ''
+      export PATH="${makeBinPath [ libvirt ]}:$PATH"
+      assert_equals() {
+        expected="$1"
+        shift
+        output="$("$@")"
+        if ! [ "$output" = "$1" ]; then
+          echo "===ASSERTION FAILED!======================================="
+          echo "COMMAND \"$@\""
+          echo "===EXPECTED================================================"
+          echo "$expected"
+          echo "===GOT====================================================="
+          echo "$output"
+          echo "==========================================================="
+          exit 1
+        fi
+      }
+      assert_grep() {
+        expected="$1"
+        shift
+        output="$("$@")"
+        if ! [ "$(echo "$output" | grep "$expected" | wc -l)" -gt 0 ]; then
+          echo "===ASSERTION FAILED!======================================="
+          echo "COMMAND \"$@\""
+          echo "===FAILED PATTERN=========================================="
+          echo "$expected"
+          echo "===GOT====================================================="
+          echo "$output"
+          echo "==========================================================="
+          exit 1
+        fi
+      }
+      ${text}
+    '').outPath;
+in
+runNixOSTest {
   name = "NixOS test";
 
   defaults = {
@@ -69,14 +72,17 @@ in runNixOSTest {
       useUserPackages = true;
       sharedModules = [
         ../home-manager
-        ({ lib, ... }: {
-          home.stateVersion = lib.trivial.release;
-          virtualisation.libvirtd.connections."qemu:///session" = {};
-        })
+        (
+          { lib, ... }:
+          {
+            home.stateVersion = lib.trivial.release;
+            virtualisation.libvirtd.connections."qemu:///session" = { };
+          }
+        )
       ];
       users = {
-        "admin" = {};
-        "user" = {};
+        "admin" = { };
+        "user" = { };
       };
     };
   };

@@ -1,4 +1,5 @@
-{ config, ... }: {
+{ config, ... }:
+{
   config.systemd.services."libvirt-nix" = {
     description = "Configure libvirtd";
     after = [ "libvirtd.service" ];

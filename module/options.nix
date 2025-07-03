@@ -1,5 +1,6 @@
-{ lib
-, ...
+{
+  lib,
+  ...
 }:
 
 let
@@ -7,7 +8,8 @@ let
 
   inherit (xtypes) connection;
   inherit (lib) mkOption;
-in {
+in
+{
   options.virtualisation.libvirtd = {
     connections = mkOption {
       type = connection;

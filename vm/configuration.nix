@@ -1,11 +1,15 @@
-{ lib, ... }: {
+{ lib, ... }:
+{
   virtualisation = {
     graphics = false;
     cores = 4;
     memorySize = 1024 * 2;
     diskSize = 1024 * 2;
     qemu = {
-      consoles = [ "tty0" "hvc0" ];
+      consoles = [
+        "tty0"
+        "hvc0"
+      ];
       options = [
         "-serial null"
         "-device virtio-serial"
@@ -18,7 +22,7 @@
 
   virtualisation.libvirtd = {
     enable = true;
-    connections."qemu:///system" = {};
+    connections."qemu:///system" = { };
   };
 
   environment.loginShellInit = ''

@@ -1,15 +1,17 @@
-{ submodule
-, mkOption
-, listOf
-, nullOr
-, oneOf
-, bool
-, path
-, str
+{
+  submodule,
+  mkOption,
+  listOf,
+  nullOr,
+  oneOf,
+  bool,
+  path,
+  str,
 
-, flip
-, pipe
-, ... }:
+  flip,
+  pipe,
+  ...
+}:
 flip pipe [ submodule listOf nullOr ] {
   options = {
     active = mkOption { type = nullOr bool; };

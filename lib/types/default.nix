@@ -1,4 +1,5 @@
-lib: let
+lib:
+let
   xlib = lib // lib.types // builtins // xtypes;
   xtypes = {
     connection = import ./connection.nix xlib;
@@ -6,4 +7,5 @@ lib: let
     unmanaged = import ./unmanaged.nix xlib;
     unmanaged-definition = import ./unmanaged-definition.nix xlib;
   };
-in xtypes
+in
+xtypes

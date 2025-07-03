@@ -1,13 +1,15 @@
-{ unmanaged-definition
+{
+  unmanaged-definition,
 
-, submodule
-, mkOption
-, attrsOf
+  submodule,
+  mkOption,
+  attrsOf,
 
-, flip
-, pipe
-, ... }:
-flip pipe [ attrsOf submodule ] ({ config, name, ... }: {
+  flip,
+  pipe,
+  ...
+}:
+flip pipe [ attrsOf submodule ] {
   options = {
     networks = mkOption {
       type = unmanaged-definition;
@@ -22,4 +24,4 @@ flip pipe [ attrsOf submodule ] ({ config, name, ... }: {
       default = null;
     };
   };
-})
+}
