@@ -10,7 +10,7 @@
   pipe,
   ...
 }:
-flip pipe [ attrsOf submodule ] {
+flip pipe [ submodule attrsOf ] {
   options = {
     networks = mkOption {
       type = definition;
