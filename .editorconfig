@@ -9,5 +9,5 @@ charset = utf-8
 indent_size = 4
 indent_style = space
 
-[*.{nix,md}]
+[*.{nix,md,py}]
 indent_size = 2
