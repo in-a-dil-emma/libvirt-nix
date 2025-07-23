@@ -1,5 +1,10 @@
 # NixOS module for configuring Libvirt domains, pools and networks
 
+> [!CAUTION]
+> This module is still not production ready[^1].
+
+[^1]: The URLs below will get updated to point to the release tags.
+
 ## Setup
 
 ### Inputs
