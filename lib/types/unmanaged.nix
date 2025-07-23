@@ -4,6 +4,7 @@
   submodule,
   mkOption,
   attrsOf,
+  bool,
 
   flip,
   pipe,
@@ -22,6 +23,10 @@ flip pipe [ submodule attrsOf ] {
     pools = mkOption {
       type = unmanaged-definition;
       default = null;
+    };
+    mutable = mkOption {
+      type = bool;
+      default = false;
     };
   };
 }

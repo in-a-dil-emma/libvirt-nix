@@ -140,11 +140,12 @@ npins
 
 <summary>virtualisation.libvirtd.connections.<ins>uri</ins>.<b>unmanaged</b></summary>
 
-| OPTION   | DEFAULT | TYPE              |
-|----------|---------|-------------------|
-| networks | null    | submodule or null |
-| domains  | null    | submodule or null |
-| pools    | null    | submodule or null |
+| OPTION   | DEFAULT | TYPE              | DESCRIPTION                   |
+|----------|---------|-------------------|-------------------------------|
+| networks | null    | submodule or null |                               |
+| domains  | null    | submodule or null |                               |
+| pools    | null    | submodule or null |                               |
+| mutable  | false   | boolean           | true ⇒ ignore unknown objects |
 
 </details>
 
