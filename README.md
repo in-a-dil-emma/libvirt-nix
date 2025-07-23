@@ -132,7 +132,7 @@ npins
 |------------|-----------------|------------------------------------------------------|
 | active     | null or boolean | null ⇒ do nothing                                    |
 | restart    | null or boolean | false ⇒ do nothing, null ⇒ only on definition change |
-| definition | path or string  | Path to .xml file                                    |
+| definition | path or string  | path to file or string literal                       |
 
 </details>
 
