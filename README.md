@@ -154,11 +154,11 @@ npins
 <details>
 <summary>virtualisation.libvirtd.connections.<ins>uri</ins>.unmanaged.<ins>type</ins>.<b><ins>list element</ins></b></summary>
 
-| OPTION  | TYPE            | DESCRIPTION        |
-|---------|-----------------|--------------------|
-| active  | null or boolean | null ⇒ do nothing  |
-| restart | boolean         | false ⇒ do nothing |
-| name    | string          | must be unique     |
+| OPTION  | TYPE             | DESCRIPTION        |
+|---------|------------------|--------------------|
+| active  | null or boolean  | null ⇒ do nothing  |
+| restart | boolean          | false ⇒ do nothing |
+| name    | string or RegExp | must be unique     |
 
 </details>
 
