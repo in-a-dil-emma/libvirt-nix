@@ -23,6 +23,6 @@ in
   };
 
   config.libvirt-nix.mainScript = writeShellScript "configure-libvirt-main" ''
-    exec ${getExe' script "main.py"} "${dataJSON}"
+    exec ${getExe' script "main.py"} '${dataJSON}'
   '';
 }
