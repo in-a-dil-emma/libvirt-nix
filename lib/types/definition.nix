@@ -6,6 +6,7 @@
   oneOf,
   bool,
   path,
+  enum,
   str,
 
   flip,
@@ -14,7 +15,7 @@
 }:
 flip pipe [ submodule listOf nullOr ] {
   options = {
-    active = mkOption { type = nullOr bool; };
+    active = mkOption { type = enum [ true false null "once" ]; };
     restart = mkOption { type = nullOr bool; };
     definition = mkOption { type = oneOf path str; };
   };

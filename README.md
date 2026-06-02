@@ -128,11 +128,11 @@ npins
 <details>
 <summary>virtualisation.libvirtd.connections.<ins>uri</ins>.<ins>type</ins>.<b><ins>list element</ins></b></summary>
 
-| OPTION     | TYPE            | DESCRIPTION                                          |
-|------------|-----------------|------------------------------------------------------|
-| active     | null or boolean | null ⇒ do nothing                                    |
-| restart    | null or boolean | false ⇒ do nothing, null ⇒ only on definition change |
-| definition | path or string  | path to file or string literal                       |
+| OPTION     | TYPE                    | DESCRIPTION                                          |
+|------------|-------------------------|------------------------------------------------------|
+| active     | null, boolean or "once" | null ⇒ do nothing, "once" ⇒ start then ignore        |
+| restart    | null or boolean         | false ⇒ do nothing, null ⇒ only on definition change |
+| definition | path or string          | path to file or string literal                       |
 
 </details>
 
@@ -154,11 +154,11 @@ npins
 <details>
 <summary>virtualisation.libvirtd.connections.<ins>uri</ins>.unmanaged.<ins>type</ins>.<b><ins>list element</ins></b></summary>
 
-| OPTION  | TYPE             | DESCRIPTION        |
-|---------|------------------|--------------------|
-| active  | null or boolean  | null ⇒ do nothing  |
-| restart | boolean          | false ⇒ do nothing |
-| name    | string or RegExp | must be unique     |
+| OPTION  | TYPE                    | DESCRIPTION                                          |
+|---------|-------------------------|------------------------------------------------------|
+| active  | null, boolean or "once" | null ⇒ do nothing, "once" ⇒ start then ignore        |
+| restart | null or boolean         | false ⇒ do nothing, null ⇒ only on definition change |
+| name    | string or RegExp        | domain name  as per domain xml, must be unique       |
 
 </details>
 
@@ -176,15 +176,17 @@ npins
         # the options are identical for networks, pools and domains
         # the setup script will apply configuration to each entity one by one in a loop
         # said loop, when described using pseudo-code, will look roughly like this:
-        #   if { ∉ declared } then { stop; undefine; next entity; }
-        #   if { ∈ unmanaged && name ∉ names in unmanaged } then { stop; undefine; next entity; }
-        #   if { ∈ managed } then { apply definition; }
-        #   if { !running && active == true } then { start; }
-        #   else if { running && active == false } then { stop; }
+        #   if { entity not part of declared lists } then { stop; undefine(entity); restart loop with next entity; }
+        #   if { entity part of managed list } then { apply(definition); }
+        #   if { not running(entity) and active == true } then { start(entity); }
+        #   else if { not running(entity) and active == "once" && not reached("default.target") } then { start(entity); }
+        #   else if { not running(entity) and active == "once" && was not defined(entity) } then { start(entity); }
+        #   else if { running(entity) and active == false } then { stop(entity); }
         #   else { do nothing; }
-        #   if { running && restart == null && definition changed } then { restart; }
-        #   else if { running && restart == true } then { restart; }
+        #   if { running(entity) && restart == null && definition_changed } then { restart(entity); }
+        #   else if { running(entity) && restart == true } then { restart(entity); }
         #   else { do nothing; }
+        #   restart loop with next entity;
         networks = [
           {
             active = true;   # start this network
