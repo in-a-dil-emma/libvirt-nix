@@ -128,11 +128,11 @@ npins
 <details>
 <summary>virtualisation.libvirtd.connections.<ins>uri</ins>.<ins>type</ins>.<b><ins>list element</ins></b></summary>
 
-| OPTION     | TYPE                    | DESCRIPTION                                          |
-|------------|-------------------------|------------------------------------------------------|
-| active     | null, boolean or "once" | null ⇒ do nothing, "once" ⇒ start then ignore        |
-| restart    | null or boolean         | false ⇒ do nothing, null ⇒ only on definition change |
-| definition | path or string          | path to file or string literal                       |
+| OPTION     | TYPE                                | DESCRIPTION                                                                  |
+|------------|-------------------------------------|------------------------------------------------------------------------------|
+| active     | null, boolean, "once" or "inactive" | null ⇒ do nothing, "once" ⇒ start then ignore, "inactive" ⇒ stop then ignore |
+| restart    | null or boolean                     | false ⇒ do nothing, null ⇒ only on definition change                         |
+| definition | path or string                      | path to file or string literal                                               |
 
 </details>
 
@@ -154,11 +154,11 @@ npins
 <details>
 <summary>virtualisation.libvirtd.connections.<ins>uri</ins>.unmanaged.<ins>type</ins>.<b><ins>list element</ins></b></summary>
 
-| OPTION  | TYPE                    | DESCRIPTION                                          |
-|---------|-------------------------|------------------------------------------------------|
-| active  | null, boolean or "once" | null ⇒ do nothing, "once" ⇒ start then ignore        |
-| restart | null or boolean         | false ⇒ do nothing, null ⇒ only on definition change |
-| name    | string or RegExp        | domain name  as per domain xml, must be unique       |
+| OPTION  | TYPE                                | DESCRIPTION                                                                  |
+|---------|-------------------------------------|------------------------------------------------------------------------------|
+| active  | null, boolean, "once" or "inactive" | null ⇒ do nothing, "once" ⇒ start then ignore, "inactive" ⇒ stop then ignore |
+| restart | null or boolean                     | false ⇒ do nothing, null ⇒ only on definition change                         |
+| name    | string or RegExp                    | domain name  as per domain xml, must be unique                               |
 
 </details>
 
@@ -181,6 +181,8 @@ npins
         #   if { not running(entity) and active == true } then { start(entity); }
         #   else if { not running(entity) and active == "once" && not reached("default.target") } then { start(entity); }
         #   else if { not running(entity) and active == "once" && was not defined(entity) } then { start(entity); }
+        #   else if { running(entity) and active == "inactive" && not reached("default.target") } then { stop(entity); }
+        #   else if { running(entity) and active == "inactive" && was not defined(entity) } then { stop(entity); }
         #   else if { running(entity) and active == false } then { stop(entity); }
         #   else { do nothing; }
         #   if { running(entity) && restart == null && definition_changed } then { restart(entity); }

@@ -15,7 +15,7 @@
 }:
 flip pipe [ submodule listOf nullOr ] {
   options = {
-    active = mkOption { type = enum [ true false null "once" ]; };
+    active = mkOption { type = enum [ true false null "once" "inactive" ]; };
     restart = mkOption { type = nullOr bool; };
     definition = mkOption { type = oneOf path str; };
   };
